@@ -16,7 +16,7 @@ class DeleteModel{
         if($stmt->rowCount()){
             return "SE ELIMINO UN REGISTRO DE LA BBDD";
         }else{
-            return "SURGIO UN ERROR, NO SE ELIMINO EL REGISTRO DE LA BBDD";
+            return "NO SE ELIMINO EL REGISTRO DE LA BBDD";
         }
 
     }

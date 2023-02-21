@@ -9,6 +9,7 @@ class PostModel{
         $this->dbh=Conexion::getConexion();
     }
     public function post($columnas,$valores){
+
         $stmt=$this->dbh->prepare("INSERT INTO $this->table ($columnas) VALUES ('$valores')");
         $stmt->execute();
         if($stmt->rowCount()){

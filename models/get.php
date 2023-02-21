@@ -24,4 +24,10 @@ class GetModel{
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     }
+    public function getData($cadena)
+    {
+        $stmt= $this->dbh->prepare("SELECT * FROM $this->table WHERE $cadena");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

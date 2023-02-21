@@ -22,4 +22,13 @@ class GetController
     {
         return $this->model->getOne($id);
     }
+    public function getWithWhere($getAssoc)
+    {
+        $cadena="";
+        foreach ($getAssoc as $clave => $valor) {
+            $cadena .= $clave . "=" . "'$valor'" . " and ";
+        }
+        $cadena=rtrim($cadena," and ");
+        return $this->model->getData($cadena);
+    }
 }
