@@ -4,6 +4,7 @@ class PutModel{
     public $table;
     public $dbh;
 
+
     function __construct($table)
     {
         $this->table=$table;
@@ -19,8 +20,19 @@ class PutModel{
         }else{
             return "NO SE ACTUALIZO EL REGISTRO";
         }
-
     }
+    public function putWhere($sentence_put,$sentence_where){
+        $stmt=$this->dbh->prepare("UPDATE $this->table SET $sentence_put  $sentence_where");
+        $stmt->execute();
+
+        if($stmt->rowCount()){
+            return "REGISTRO ACTUALIZADO";
+        }else{
+            return "NO SE ACTUALIZO EL REGISTRO";
+        }
+    }
+ 
+ 
 }
 
 ?>

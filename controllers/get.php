@@ -5,6 +5,7 @@ class GetController
 {
     public $table;
     public $model;
+    public $sentence_where="";
 
     function __construct($table)
     {
@@ -22,22 +23,21 @@ class GetController
     {
         return $this->model->getOne($id);
     }
-    public function getWithWhere($getAssoc)
+    public function getDataWithWhere($getAssoc)
     {
         $cadena="";
         foreach ($getAssoc as $clave => $valor) {
-            $cadena .= $clave . "=" . "'$valor'" . " and ";
+            $cadena .= $clave[0] . ".id=" . "'$valor'" . " and ";
         }
-        $cadena=rtrim($cadena," and ");
-        return $this->model->getData($cadena);
+        $this->sentence_where="WHERE ". rtrim($cadena," and ");
     }
-    public function getDataAllTables(){
-        $data=$this->model->getDataAllTables();
+    public function getAllDataTables(){
+        $data=$this->model->getAllDataTables($this->sentence_where);
         //EL PROBLEMA DE ESTA DATA ES Q LOS VALORES DEL ARREGLO SON CADENAS JSON() POR ELLO DEBEMOS DECODIFICARLAS PARA VOLVERLAS A CODIFICAR
+        
         return $data = array_map(function($item) {
             return array_map('json_decode', $item);
         }, $data);
        
-
     }
 }

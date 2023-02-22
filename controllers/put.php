@@ -4,6 +4,7 @@ class PutController{
     public $table;
     public $model;
     public $sentence_put="";
+    public $sentence_where="";
 
     function __construct($table)
     {
@@ -25,6 +26,18 @@ class PutController{
         else{
             return "ID NO PERMITIDO";
         }
+    }
+    public function updateDataWithWhere($upAssoc)
+    {
+        $cadena="";
+        foreach ($upAssoc as $clave => $valor) {
+            $cadena .= $clave . "_id=" . "'$valor'" . " and ";
+        }
+        $this->sentence_where="WHERE ". rtrim($cadena," and ");
+    }
+    public function putWhere(){
+        $this->sentence_put=rtrim($this->sentence_put,", ");
+        return $this->model->putWhere($this->sentence_put,$this->sentence_where);
     }
 }
 

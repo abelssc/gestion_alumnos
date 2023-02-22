@@ -29,7 +29,7 @@ class GetModel
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function getDataAllTables()
+    public function getAllDataTables($sentence_where)
     {
         $stmt = $this->dbh->prepare("
         SELECT 
@@ -55,7 +55,8 @@ class GetModel
             ) AS 'notas'
         FROM alumnos a
         JOIN notas n ON a.id = n.alumno_id
-        JOIN cursos c ON n.curso_id = c.id;
+        JOIN cursos c ON n.curso_id = c.id
+        $sentence_where
         ");
         $stmt->execute();
         //DEVUELVE LOS VALORES EN FORMATO JSON, TENEMOS Q DECODIFICARLO
