@@ -1,5 +1,6 @@
 <?php
 header("Access-Control-Allow-Origin: *");
+header('Access-Control-Allow-Headers: Content-Type');
 header("Content-Type: application/json");
 header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS');
 require $_SERVER["DOCUMENT_ROOT"]."/gestion_alumnos/config/dirs.php";
@@ -19,12 +20,12 @@ function obtenerDatosdelaURL(){
    
     ##Eliminamos las / al inicio y al final de la url: gestion_alumnos/tabla[/id]
     $ruta = trim($url_actual["path"], '/');
-
+    
     ##Obtenemos los fragmentos de la ruta
     $fragmentos_de_ruta = explode("/", $ruta);
     $tabla = $fragmentos_de_ruta[1]??null; 
     $id = $fragmentos_de_ruta[2] ?? null;
-
+  
     ##Obtenemos el metodo de la peticion
     $method= $_SERVER["REQUEST_METHOD"];
 
@@ -80,7 +81,11 @@ else if($datosURL['method']==="PUT"){
 }
 else if($datosURL['method']==="DELETE"){
     $class = new DeleteController($datosURL['tabla']);
-    echo json_encode($class->delete($datosURL['id']));
+    if(is_null($datosURL['tabla'])){
+        // echo json_encode($class->deleteWithWhere($_POST));
+     }else{
+         echo json_encode($class->delete($datosURL['id']));
+     }
 }
 else{
     echo "metodo no permitido";
