@@ -31,4 +31,13 @@ class GetController
         $cadena=rtrim($cadena," and ");
         return $this->model->getData($cadena);
     }
+    public function getDataAllTables(){
+        $data=$this->model->getDataAllTables();
+        //EL PROBLEMA DE ESTA DATA ES Q LOS VALORES DEL ARREGLO SON CADENAS JSON() POR ELLO DEBEMOS DECODIFICARLAS PARA VOLVERLAS A CODIFICAR
+        return $data = array_map(function($item) {
+            return array_map('json_decode', $item);
+        }, $data);
+       
+
+    }
 }

@@ -1,8 +1,17 @@
 <?php
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json");
+header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS');
 require $_SERVER["DOCUMENT_ROOT"]."/gestion_alumnos/config/dirs.php";
-
+// echo '<pre>';
+// echo json_encode(array("data"=>array("val1"=>"col1","val2"=>"col2")));
+// echo '</pre>';
+// exit;
 /*--===============================================
-EN ESTE PRIMER BLOQUE OBTENDREMOS LA TABLA, EL ID Y EL METODO DE LA URL
+EN ESTE PRIMER BLOQUE OBTENDREMOS LOS DATOS DE LA PETICION:
+**LA TABLA
+**EL ID
+**Y EL METODO DE LA PETICION 
 =================================================*/
 function obtenerDatosdelaURL(){
     ##Obtenemos la url /gestion_alumnos/tabla[/id]/
@@ -13,7 +22,7 @@ function obtenerDatosdelaURL(){
 
     ##Obtenemos los fragmentos de la ruta
     $fragmentos_de_ruta = explode("/", $ruta);
-    $tabla = $fragmentos_de_ruta[1]; 
+    $tabla = $fragmentos_de_ruta[1]??null; 
     $id = $fragmentos_de_ruta[2] ?? null;
 
     ##Obtenemos el metodo de la peticion
@@ -26,6 +35,14 @@ function obtenerDatosdelaURL(){
     );
 }
 $datosURL=obtenerDatosdelaURL();
+/*--===============================================
+EN EL RESTO DEL CODIGO:
+**LLAMAREMOS AL CONTROLADOR
+**EVALUAREMOS EL METODO DE ENVIO
+**OBTENDREMOS EL JSON DE LA PETICION
+**LLAMAREMOS A LA CLASE CORRESPONDIENTE
+**IMPRIMIREMOS LA RESPUESTA EN JSON
+=================================================*/
 
 ##INCLUIMOS EL CONTROLADOR PARA EL METODO ESPECIFICO
 include(CONTROLLERS_PATH . $datosURL['method'] . '.php');
@@ -35,9 +52,11 @@ include(CONTROLLERS_PATH . $datosURL['method'] . '.php');
 if($datosURL['method']==="GET"){
     ##LLAMAMOS AL CONTROLADOR GET CON SU RESPECTIVA TABLA
     $class= new GetController($datosURL['tabla']);
-
-    ##
-    if(empty($_GET)){
+    ##SI NO SE ENVIA TABLA EN LA URL SE HACE LLAMADO A TODA LA DATA
+    if(is_null($datosURL['tabla'])){
+       echo json_encode($class->getDataAllTables());
+    }
+    else if(empty($_GET)){
         ##REALIZAMOS LA PETICION CON /RUTA[/ID]?
         echo (is_null($datosURL['id']))
         ? json_encode($class->getAll())
